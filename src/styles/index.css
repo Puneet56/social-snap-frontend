@@ -642,8 +642,8 @@ video {
 .h-48 {
 	height: 12rem;
 }
-.h-\[12\.5\%\] {
-	height: 12.5%;
+.h-16 {
+	height: 4rem;
 }
 .h-\[70\%\] {
 	height: 70%;
@@ -653,6 +653,9 @@ video {
 }
 .h-\[70vh\] {
 	height: 70vh;
+}
+.h-\[12\.5\%\] {
+	height: 12.5%;
 }
 .h-\[10rem\] {
 	height: 10rem;
@@ -771,6 +774,9 @@ video {
 }
 .items-center {
 	align-items: center;
+}
+.items-start {
+	align-items: flex-start;
 }
 .justify-start {
 	justify-content: flex-start;
@@ -1000,6 +1006,14 @@ video {
 ::-webkit-scrollbar-thumb {
 	background: #5e5e5f;
 	border-radius: 5px;
+}
+
+._loading_overlay_wrapper {
+	position: absolute !important;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
 
 .hover\:bg-fbhover:hover {

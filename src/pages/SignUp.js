@@ -65,14 +65,16 @@ const SignUp = () => {
 					></Input>
 					<button
 						type='submit'
-						className='w-36 h-8 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
+						className='w-36 h-12 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
 						onClick={handleSubmit}
 					>
 						SignUp
 					</button>
 					<h2>Already have an Account? </h2>
 					<Link to='/login'>
-						<button className='w-52 bg-green-600 h-8 text-white'>Log In</button>
+						<button className='w-52 bg-green-600 h-12 text-white'>
+							Log In
+						</button>
 					</Link>
 				</form>
 			</div>

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+// eslint-disable-next-line
+import { useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 
@@ -6,27 +7,12 @@ const Input = tw.input`h-9 text-gray-300 rounded-full pl-3 w-10/12 outline-none 
 `;
 
 const Login = () => {
-	const [enteredEmail, setEnteredEmail] = useState('');
-	const [enteredPassword, setEnteredPassword] = useState('');
-
-	// const [error, setError] = useState('');
-	// const [loading, setLoading] = useState(false);
+	const email = useRef();
+	const password = useRef();
 	const history = useHistory();
 
 	const handleSubmit = async (event) => {
-		// event.preventDefault();
-		// setEnteredEmail('');
-		// setEnteredPassword('');
-		// try {
-		// 	setError('');
-		// 	setLoading(true);
-		// 	await login(enteredEmail, enteredPassword);
 		history.push('/');
-		// } catch (error) {
-		// 	setError('failed to login');
-		// 	console.log(error);
-		// }
-		// setLoading(false);
 	};
 
 	return (
@@ -45,26 +31,25 @@ const Login = () => {
 					<Input
 						type='text'
 						placeholder='Enter email'
-						value={enteredEmail}
-						onChange={(event) => setEnteredEmail(event.target.value)}
+						required
+						ref={email}
 					></Input>
 					<label>Enter Password</label>
 					<Input
 						type='password'
 						placeholder='Enter password'
-						value={enteredPassword}
-						onChange={(event) => setEnteredPassword(event.target.value)}
+						ref={password}
 					></Input>
 					<button
 						type='submit'
-						className='w-36 h-8 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
+						className='w-36 h-12 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
 						onClick={handleSubmit}
 					>
 						Login
 					</button>
 					<h2>Do not Have an Account? </h2>
 					<Link to='/signup'>
-						<button className='w-52 bg-green-600 h-8 text-white'>
+						<button className='w-52 bg-green-600 h-12 text-white'>
 							Create a new Account
 						</button>
 					</Link>
