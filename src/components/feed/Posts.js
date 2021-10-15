@@ -54,7 +54,7 @@ function Posts(props) {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/posts/614d7b76e842ab0c54eb6748`
+					url + `/api/posts/timeline/614d7b76e842ab0c54eb6748`
 				);
 				setPosts(fetchedposts.data);
 			} catch (error) {

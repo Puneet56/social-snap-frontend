@@ -19,6 +19,7 @@ const NavItem = tw.div`w-[15%] h-4/5 flex items-center justify-center hover:bg-f
 
 function Navbar() {
 	const { user } = useAuth();
+
 	return (
 		<>
 			<LogoDiv>

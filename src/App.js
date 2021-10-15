@@ -5,6 +5,7 @@ import Friends from './pages/Friends';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Navbar from './components/navigation/Navbar';
+import PrivateRoute from './components/PrivateRoute';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Notifications from './pages/Notifications';
@@ -21,16 +22,26 @@ const App = () => {
 				<Switch>
 					<Route exact path='/login' component={Login} />
 					<Route exact path='/signup' component={SignUp} />
-					<Route path='/'>
+					<PrivateRoute path='/'>
 						<Navbar />
 						<Switch>
-							<Route exact path='/' component={Home} />
-							<Route exact path='/friends' component={Friends} />
-							<Route exact path='/notifications' component={Notifications} />
-							<Route path={`/profile/:userid`} component={Profile} />
-							<Route exact path='/settings' component={Settings} />
+							<PrivateRoute exact path='/'>
+								<Home />
+							</PrivateRoute>
+							<PrivateRoute exact path='/friends'>
+								<Friends />
+							</PrivateRoute>
+							<PrivateRoute exact path='/notifications'>
+								<Notifications />
+							</PrivateRoute>
+							<PrivateRoute path={`/profile/:userid`}>
+								<Profile />
+							</PrivateRoute>
+							<PrivateRoute exact path='/settings'>
+								<Settings />
+							</PrivateRoute>
 						</Switch>
-					</Route>
+					</PrivateRoute>
 				</Switch>
 			</Router>
 		</MainContainer>

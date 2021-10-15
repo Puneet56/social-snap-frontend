@@ -4,6 +4,7 @@ import tw from 'tailwind-styled-components';
 import axios from 'axios';
 import PostItem from '../components/feed/PostItem';
 import Loader from '../components/loader/Loader';
+import CreatePost from '../components/CreatePost';
 
 // const POSTS = [
 // 	{
@@ -60,6 +61,8 @@ function Profile() {
 
 	const params = useParams();
 
+	console.log(params.userid);
+
 	useEffect(() => {
 		setLoading(true);
 		const getUserdetails = async () => {
@@ -102,8 +105,8 @@ function Profile() {
 					className='w-full h-full'
 				></img>
 			</UserImage>
-			<div className='w-full max-w-lg mx-auto mb-28'>
-				{}
+			<div className='w-full max-w-lg mx-auto mb-28 flex flex-col items-center justify-start'>
+				{showuser && params.userid === showuser._id && <CreatePost />}
 				{posts.map((post) => (
 					<PostItem post={post} key={post._id} />
 				))}

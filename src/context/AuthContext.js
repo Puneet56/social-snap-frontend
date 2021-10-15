@@ -24,7 +24,7 @@ export const AuthProvider = (props) => {
 
 	useEffect(() => {
 		let user = JSON.parse(localStorage.getItem('user'));
-		if (localStorage.getItem('user') !== null) {
+		if (JSON.parse(localStorage.getItem('user')) !== null) {
 			console.log('old user found');
 			const getUserdetails = async () => {
 				try {
