@@ -69,7 +69,7 @@ function Posts(props) {
 			<Container>
 				{props.home && <CreatePost />}
 				{posts.map((post) => (
-					<PostItem post={post} key={post.id} />
+					<PostItem post={post} key={post._id} />
 				))}
 			</Container>
 		</>

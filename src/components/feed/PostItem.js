@@ -8,9 +8,9 @@ const Conatiner = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav
 `;
 const UserInfo = tw.div`w-full h-16 p-1 flex items-center justify-start
 `;
-const UserImage = tw.img`h-[80%] rounded-full bg-fbhover mx-2	 object-cover  
+const UserImage = tw.img`h-[80%] rounded-full bg-fbhover mx-2	object-cover  
 `;
-const PostImage = tw.img`h-[70%] w-full bg-fbhover object-contain drop-shadow-lg
+const PostImage = tw.img`h-[70%] max-h-[24rem] w-full bg-fbhover object-contain drop-shadow-lg
 `;
 const LikesComments = tw.div`w-full h-16 flex items-center justify-between
 `;
@@ -63,7 +63,7 @@ function PostItem({ post }) {
 					<LikeLogo>
 						<HiThumbUp className='w-8 h-8 p-1' />
 					</LikeLogo>
-					<p>{likes} Likes</p>
+					<p>{likes.length} Likes</p>
 				</div>
 				<p className='mr-2'>{comments} Comments</p>
 			</LikesComments>

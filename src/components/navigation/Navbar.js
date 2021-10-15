@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { AiFillHome, AiFillSetting } from 'react-icons/ai';
 import { FaUserFriends, FaUser } from 'react-icons/fa';
 import { IoMdNotifications } from 'react-icons/io';
+import { useAuth } from '../../context/AuthContext';
 
 const LogoDiv = tw.div`w-full max-w-3xl rounded-t-2xl mx-auto h-8 bg-fbnav flex items-center
 `;
@@ -17,6 +18,7 @@ const NavItem = tw.div`w-[15%] h-4/5 flex items-center justify-center hover:bg-f
 `;
 
 function Navbar() {
+	const { user } = useAuth();
 	return (
 		<>
 			<LogoDiv>
@@ -39,7 +41,7 @@ function Navbar() {
 						className='h-4/6 w-4/6 transform transition-all ease-in-out duration-100'
 						exact
 						activeClassName='h-full flex items-center justify-center border-b-4 w-3/5 text-center border-solid border-[#046ce4]'
-						to='/profile'
+						to={`/profile/${user._id}`}
 					>
 						<FaUser className='mx-auto h-5/6 w-5/6 mb-3' />
 					</NavLink>

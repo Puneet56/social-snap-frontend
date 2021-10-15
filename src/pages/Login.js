@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import { loginCall } from '../apiCalls';
@@ -12,7 +12,14 @@ const Login = () => {
 	const email = useRef();
 	const password = useRef();
 	const history = useHistory();
-	const { dispatch, error } = useAuth();
+	const { dispatch, error, user } = useAuth();
+
+	useEffect(() => {
+		console.log(user);
+		if (user) {
+			history.push('/');
+		}
+	});
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -27,8 +34,6 @@ const Login = () => {
 		} catch (error) {
 			console.log(error);
 		}
-
-		// history.push('/');
 	};
 
 	return (

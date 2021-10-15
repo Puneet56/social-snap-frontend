@@ -27,7 +27,7 @@ const App = () => {
 							<Route exact path='/' component={Home} />
 							<Route exact path='/friends' component={Friends} />
 							<Route exact path='/notifications' component={Notifications} />
-							<Route exact path='/profile' component={Profile} />
+							<Route path={`/profile/:userid`} component={Profile} />
 							<Route exact path='/settings' component={Settings} />
 						</Switch>
 					</Route>

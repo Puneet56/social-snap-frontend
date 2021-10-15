@@ -636,6 +636,9 @@ video {
 .h-full {
 	height: 100%;
 }
+.h-12 {
+	height: 3rem;
+}
 .h-\[30vh\] {
 	height: 30vh;
 }
@@ -669,9 +672,6 @@ video {
 .h-6 {
 	height: 1.5rem;
 }
-.h-12 {
-	height: 3rem;
-}
 .h-4\/5 {
 	height: 80%;
 }
@@ -689,6 +689,15 @@ video {
 }
 .max-h-\[70vh\] {
 	max-height: 70vh;
+}
+.max-h-\[80\%\] {
+	max-height: 80%;
+}
+.max-h-\[70\%\] {
+	max-height: 70%;
+}
+.max-h-\[24rem\] {
+	max-height: 24rem;
 }
 .min-h-\[20vh\] {
 	min-height: 20vh;
