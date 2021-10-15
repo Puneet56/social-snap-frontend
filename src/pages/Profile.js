@@ -60,14 +60,12 @@ function Profile() {
 
 	const params = useParams();
 
-	console.log(params);
-
 	useEffect(() => {
 		setLoading(true);
 		const getUserdetails = async () => {
 			try {
 				const fetchedUser = await axios.get(
-					url + `/api/users/614d7b63e842ab0c54eb6746`
+					url + `/api/users/${params.userid}`
 				);
 				setshowUser(fetchedUser.data);
 			} catch (error) {
@@ -78,7 +76,7 @@ function Profile() {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/posts/614d7b63e842ab0c54eb6746`
+					url + `/api/posts/posts/${params.userid}`
 				);
 				setPosts(fetchedposts.data);
 				setLoading(false);
@@ -89,7 +87,7 @@ function Profile() {
 		};
 		getUserdetails();
 		getPosts();
-	}, []);
+	}, [params.userid]);
 
 	return (
 		<Container>
@@ -105,6 +103,7 @@ function Profile() {
 				></img>
 			</UserImage>
 			<div className='w-full max-w-lg mx-auto mb-28'>
+				{}
 				{posts.map((post) => (
 					<PostItem post={post} key={post._id} />
 				))}
