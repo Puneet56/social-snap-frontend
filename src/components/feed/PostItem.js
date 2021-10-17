@@ -24,8 +24,6 @@ function PostItem({ post }) {
 	const { userId, image, likes, comments, description } = post;
 	const [user, setUser] = useState();
 
-	console.log(userId);
-
 	useEffect(() => {
 		const getUserdetails = async () => {
 			try {

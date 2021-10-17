@@ -15,7 +15,6 @@ const Login = () => {
 	const { dispatch, error, user } = useAuth();
 
 	useEffect(() => {
-		console.log(user);
 		if (user) {
 			history.push('/');
 		}
@@ -45,10 +44,14 @@ const Login = () => {
 				<p className='text-xl lg:text-5xl lg:font-medium m-5'>
 					Connect to the World!
 				</p>
-				{typeof error === 'string' ? (
-					<h1>{error}</h1>
+				{error ? (
+					typeof error === 'string' ? (
+						<h1>{error}</h1>
+					) : (
+						<h1>Some error occoured</h1>
+					)
 				) : (
-					<h1>Some error occoured</h1>
+					''
 				)}
 				<form className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'>
 					<h1 className='text-4xl font-bold'>Login</h1>

@@ -9,7 +9,8 @@ export const loginCall = async (userCredential, dispatch) => {
 		if (typeof res.data !== 'object') {
 			dispatch({ type: 'LOGIN_FAILURE', payload: res.data });
 		} else {
-			dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
+			localStorage.setItem('social-snap-token', res.data.token);
+			dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.user });
 		}
 	} catch (err) {
 		console.log(err);

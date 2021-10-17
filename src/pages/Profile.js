@@ -5,6 +5,7 @@ import axios from 'axios';
 import PostItem from '../components/feed/PostItem';
 import Loader from '../components/loader/Loader';
 import CreatePost from '../components/CreatePost';
+import { useAuth } from '../context/AuthContext';
 
 // const POSTS = [
 // 	{
@@ -51,6 +52,8 @@ const CoverPhoto = tw.div`w-full mt-4 h-[30vh] object-fill object-center bg-gree
 `;
 const UserImage = tw.div`overflow-hidden rounded-full w-48 h-48 bg-yellow-400 origin-center -mt-24 ml-[calc(50%-6rem)] object-contain object-center
 `;
+const UserInfo = tw.div`w-11/12 my-3 max-w-lg h-[30vh] min-h-[30vh] bg-fbnav rounded-xl
+`;
 
 const url = process.env.REACT_APP_URL;
 
@@ -58,10 +61,9 @@ function Profile() {
 	const [loading, setLoading] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const [showuser, setshowUser] = useState([]);
+	const { user } = useAuth();
 
 	const params = useParams();
-
-	console.log(params.userid);
 
 	useEffect(() => {
 		setLoading(true);
@@ -106,7 +108,8 @@ function Profile() {
 				></img>
 			</UserImage>
 			<div className='w-full max-w-lg mx-auto mb-28 flex flex-col items-center justify-start'>
-				{showuser && params.userid === showuser._id && <CreatePost />}
+				<UserInfo></UserInfo>
+				{showuser && params.userid === user._id && <CreatePost />}
 				{posts.map((post) => (
 					<PostItem post={post} key={post._id} />
 				))}

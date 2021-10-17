@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
+import { useAuth } from '../context/AuthContext';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full pl-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
@@ -9,6 +10,8 @@ const SignUp = () => {
 	const [enteredEmail, setEnteredEmail] = useState('');
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredUsername, setEnteredUsername] = useState('');
+
+	const { user } = useAuth();
 
 	// const [error, setError] = useState('');
 	// const [loading, setLoading] = useState(false);
@@ -29,6 +32,12 @@ const SignUp = () => {
 		// }
 		// setLoading(false);
 	};
+
+	useEffect(() => {
+		if (user) {
+			history.push('/');
+		}
+	});
 
 	return (
 		<>

@@ -10,7 +10,8 @@ export const useAuth = () => {
 };
 
 const initialState = {
-	user: JSON.parse(localStorage.getItem('user')) || null,
+	token: localStorage.getItem('social-snap-token') || null,
+	user: null,
 	isLoading: false,
 	error: false,
 };
@@ -23,21 +24,35 @@ export const AuthProvider = (props) => {
 	console.log(state);
 
 	useEffect(() => {
-		let user = JSON.parse(localStorage.getItem('user'));
-		if (JSON.parse(localStorage.getItem('user')) !== null) {
-			console.log('old user found');
-			const getUserdetails = async () => {
+		let token = localStorage.getItem('social-snap-token');
+		if (localStorage.getItem('social-snap-token') !== null) {
+			console.log('token found');
+			const verifyToken = async () => {
 				try {
-					const fetchedUser = await axios.get(url + `/api/users/${user._id}`);
-					dispatch({ type: 'LOGIN_SUCESS', payload: fetchedUser.data });
+					const res = await axios.get(url + '/api/auth/verify', {
+						headers: { Authorization: `${token}` },
+					});
+					const getUserdetails = async () => {
+						try {
+							const fetchedUser = await axios.get(
+								url + `/api/users/${res.data}`
+							);
+							dispatch({ type: 'LOGIN_SUCCESS', payload: fetchedUser.data });
+						} catch (error) {
+							console.log(error);
+						}
+					};
+					getUserdetails();
 				} catch (error) {
+					console.log('error happened');
 					console.log(error);
 				}
 			};
-			getUserdetails();
+			verifyToken();
+		} else {
+			localStorage.setItem('social-snap-token', state.token);
 		}
-		localStorage.setItem('user', JSON.stringify(state.user));
-	}, [state.user]);
+	}, [state.token]);
 
 	const value = {
 		user: state.user,
