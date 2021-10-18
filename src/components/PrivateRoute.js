@@ -8,7 +8,7 @@ function PrivateRoute(props) {
 
 	return (
 		<>
-			{user ? (
+			{user && typeof user !== 'string' ? (
 				<Route path={path} component={component} {...others} />
 			) : (
 				<Redirect to='/signup' />

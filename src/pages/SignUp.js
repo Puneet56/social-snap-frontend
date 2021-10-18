@@ -18,34 +18,22 @@ const SignUp = () => {
 	const history = useHistory();
 
 	const handleSubmit = async (event) => {
-		// event.preventDefault();
-		// setEnteredEmail('');
-		// setEnteredPassword('');
-		// try {
-		// 	setError('');
-		// 	setLoading(true);
-		// 	await login(enteredEmail, enteredPassword);
 		history.push('/');
-		// } catch (error) {
-		// 	setError('failed to login');
-		// 	console.log(error);
-		// }
-		// setLoading(false);
 	};
 
 	useEffect(() => {
-		if (user) {
+		if (user && typeof user === 'object') {
 			history.push('/');
 		}
-	});
+	}, [history, user]);
 
 	return (
 		<>
-			<div className=' h-full items-center justify-center flex flex-col'>
-				<p className='text-3xl lg:text-7xl lg:font-medium m-5'>
+			<div className=' h-full items-center justify-start flex flex-col overflow-auto'>
+				<p className='text-3xl lg:text-5xl lg:font-medium m-5 mt-16'>
 					Welcome To Social Snap
 				</p>
-				<p className='text-xl lg:text-5xl lg:font-medium m-5'>
+				<p className='text-xl lg:text-3xl lg:font-medium m-5'>
 					Connect to the World!
 				</p>
 				{/* {error !== '' && <h1>{error}</h1>} */}

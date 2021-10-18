@@ -584,10 +584,6 @@ video {
 	margin-left: 0.5rem;
 	margin-right: 0.5rem;
 }
-.my-5 {
-	margin-top: 1.25rem;
-	margin-bottom: 1.25rem;
-}
 .mr-2 {
 	margin-right: 0.5rem;
 }
@@ -605,6 +601,9 @@ video {
 }
 .mb-28 {
 	margin-bottom: 7rem;
+}
+.mt-16 {
+	margin-top: 4rem;
 }
 .ml-2 {
 	margin-left: 0.5rem;
@@ -654,12 +653,6 @@ video {
 .h-\[90\%\] {
 	height: 90%;
 }
-.h-\[70vh\] {
-	height: 70vh;
-}
-.h-\[12\.5\%\] {
-	height: 12.5%;
-}
 .h-\[10rem\] {
 	height: 10rem;
 }
@@ -681,6 +674,15 @@ video {
 .h-5\/6 {
 	height: 83.333333%;
 }
+.h-1\/6 {
+	height: 16.666667%;
+}
+.h-\[25vh\] {
+	height: 25vh;
+}
+.h-1\/5 {
+	height: 20%;
+}
 .max-h-\[90\%\] {
 	max-height: 90%;
 }
@@ -695,9 +697,6 @@ video {
 }
 .min-h-\[20vh\] {
 	min-height: 20vh;
-}
-.min-h-\[30vh\] {
-	min-height: 30vh;
 }
 .w-11\/12 {
 	width: 91.666667%;
@@ -812,6 +811,9 @@ video {
 }
 .overflow-x-hidden {
 	overflow-x: hidden;
+}
+.overflow-auto {
+	overflow: auto;
 }
 .rounded-2xl {
 	border-radius: 1rem;
@@ -1037,6 +1039,11 @@ video {
 	.lg\:text-5xl {
 		font-size: 3rem;
 		line-height: 1;
+	}
+
+	.lg\:text-3xl {
+		font-size: 1.875rem;
+		line-height: 2.25rem;
 	}
 
 	.lg\:font-medium {

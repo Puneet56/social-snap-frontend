@@ -3,6 +3,7 @@ import tw from 'tailwind-styled-components';
 import CreatePost from '../CreatePost';
 import PostItem from './PostItem';
 import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 
 // const POSTS = [
 // 	{
@@ -49,12 +50,13 @@ const url = process.env.REACT_APP_URL;
 
 function Posts(props) {
 	const [posts, setPosts] = useState([]);
+	const { user } = useAuth();
 
 	useEffect(() => {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/timeline/614d7b76e842ab0c54eb6748`
+					url + `/api/posts/timeline/${user._id}`
 				);
 				setPosts(fetchedposts.data);
 			} catch (error) {
@@ -62,7 +64,7 @@ function Posts(props) {
 			}
 		};
 		getPosts();
-	}, []);
+	}, [user]);
 
 	return (
 		<>

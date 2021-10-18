@@ -12,13 +12,13 @@ const Login = () => {
 	const email = useRef();
 	const password = useRef();
 	const history = useHistory();
-	const { dispatch, error, user } = useAuth();
+	const { dispatch, error, user, token } = useAuth();
 
 	useEffect(() => {
-		if (user) {
+		if (user && typeof user === 'object') {
 			history.push('/');
 		}
-	});
+	}, [history, user]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -37,6 +37,7 @@ const Login = () => {
 
 	return (
 		<>
+			<p>{token}</p>
 			<div className=' h-full items-center justify-center flex flex-col'>
 				<p className='text-3xl lg:text-7xl lg:font-medium m-5'>
 					Welcome To Social Snap
