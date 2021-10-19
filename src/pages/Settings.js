@@ -1,21 +1,17 @@
 import React from 'react';
-import { Redirect } from 'react-router';
-import { useAuth } from '../context/AuthContext';
+import SignOut from '../components/settings/SignOut';
+import tw from 'tailwind-styled-components';
+import EditDetails from '../components/settings/EditDetails';
+
+const Container = tw.div`w-full h-full max-w-lg mx-auto flex items-center justify-start flex-col overflow-auto 
+`;
 
 function Settings() {
-	const { dispatch } = useAuth();
-
-	const signout = () => {
-		localStorage.removeItem('social-snap-token');
-		dispatch({ type: 'LOGOUT' });
-		console.log('clicked');
-		<Redirect to='/login' />;
-	};
-
 	return (
-		<div>
-			<button onClick={signout}>Signout</button>
-		</div>
+		<Container>
+			<SignOut />
+			<EditDetails />
+		</Container>
 	);
 }
 
