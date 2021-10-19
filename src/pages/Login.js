@@ -54,11 +54,14 @@ const Login = () => {
 				) : (
 					''
 				)}
-				<form className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'>
+				<form
+					onSubmit={handleSubmit}
+					className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'
+				>
 					<h1 className='text-4xl font-bold'>Login</h1>
 					<label>Enter Email</label>
 					<Input
-						type='text'
+						type='email'
 						placeholder='Enter email'
 						required
 						ref={email}
@@ -66,13 +69,13 @@ const Login = () => {
 					<label>Enter Password</label>
 					<Input
 						type='password'
+						required
 						placeholder='Enter password'
 						ref={password}
 					></Input>
 					<button
 						type='submit'
 						className='w-36 h-12 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
-						onClick={handleSubmit}
 					>
 						Login
 					</button>

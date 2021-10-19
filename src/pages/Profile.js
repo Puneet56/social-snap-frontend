@@ -10,9 +10,9 @@ import UserInfo from '../components/user/UserInfo';
 
 const Container = tw.div`w-full max-h-full max-w-2xl mx-auto overflow-y-auto
 `;
-const CoverPhoto = tw.div`w-full mt-4 h-[30vh] object-fill object-center bg-green-500 rounded-2xl
+const CoverPhoto = tw.div`w-full mt-4 h-[30vh] object-fill object-center bg-green-500 rounded-2xl overflow-hidden 
 `;
-const UserImage = tw.div`overflow-hidden rounded-full w-48 h-48 bg-yellow-400 origin-center -mt-24 ml-[calc(50%-6rem)] object-contain object-center
+const UserImage = tw.div`overflow-hidden relative rounded-full w-48 h-48 bg-fbhover origin-center -mt-24 ml-[calc(50%-6rem)] object-contain object-center z-30
 `;
 
 const url = process.env.REACT_APP_URL;
@@ -52,13 +52,17 @@ function Profile() {
 		};
 		getUserdetails();
 		getPosts();
-	}, [params.userid]);
+	}, [params.userid, user]);
 
 	return (
 		<Container>
 			{loading && <Loader />}
 			<CoverPhoto>
-				<img src={showuser.CoverPhoto} alt='cover'></img>
+				<img
+					className='w-full h-full'
+					src={showuser.coverPicture}
+					alt='cover'
+				></img>
 			</CoverPhoto>
 			<UserImage>
 				<img

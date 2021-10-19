@@ -10,15 +10,20 @@ const InfoBlock = tw.div`w-full h-8 text-center flex items-center justify-center
 `;
 
 function UserInfo({ user }) {
-	const { username, hometown, followers, following, createdAt } = user;
+	const { username, hometown, followers, following, createdAt, description } =
+		user;
 	return (
 		<>
 			<Info>
 				<InfoBlock>{username}</InfoBlock>
 				<FollowButton showuser={user} />
+				{description && description.length !== 0 && (
+					<InfoBlock>{description}</InfoBlock>
+				)}
 				<InfoBlock>
-					{followers && followers.length} Followers{' '}
-					{following && following.length} Followers
+					{followers && followers.length} Followers
+					{'  '}
+					{following && following.length} Following
 				</InfoBlock>
 				<InfoBlock>From {hometown}</InfoBlock>
 				<InfoBlock>

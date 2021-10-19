@@ -40,8 +40,9 @@ function PostItem({ post }) {
 		<>
 			{user && (
 				<Container>
-					<Link to={`/profile/${user._id}`}>
+					<Link className='tooltip' to={`/profile/${user._id}`}>
 						<UserInfo>
+							<span className='tooltiptext'>View Profile</span>
 							<UserImage src={user.profilePicture}></UserImage>
 							<p>{user.username}</p>
 						</UserInfo>
