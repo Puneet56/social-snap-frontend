@@ -19,6 +19,8 @@ const SignUp = () => {
 	const hometown = useRef();
 	const history = useHistory();
 
+	console.log(url);
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		dispatch({ type: 'LOGIN_START' });
