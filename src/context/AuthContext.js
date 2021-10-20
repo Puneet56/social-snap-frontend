@@ -2,6 +2,8 @@ import React, { useEffect, useContext, createContext, useReducer } from 'react';
 import axios from 'axios';
 
 import AuthReducer from './AuthReducer';
+import { useState } from 'react/cjs/react.development';
+import Loader from '../components/loader/Loader';
 
 const AuthContext = createContext();
 
@@ -20,6 +22,7 @@ const url = process.env.REACT_APP_URL;
 
 export const AuthProvider = (props) => {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
+	const [loading, setLoading] = useState(true);
 
 	console.log(state);
 
@@ -38,19 +41,23 @@ export const AuthProvider = (props) => {
 								url + `/api/users/${res.data}`
 							);
 							dispatch({ type: 'LOGIN_SUCCESS', payload: fetchedUser.data });
+							setLoading(false);
 						} catch (error) {
 							console.log(error);
+							setLoading(false);
 						}
 					};
 					getUserdetails();
 				} catch (error) {
 					console.log('error happened');
 					console.log(error);
+					setLoading(false);
 				}
 			};
 			verifyToken();
 		} else {
 			localStorage.setItem('social-snap-token', state.token);
+			setLoading(false);
 		}
 	}, [state.token]);
 
@@ -62,6 +69,11 @@ export const AuthProvider = (props) => {
 	};
 
 	return (
-		<AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
+		<>
+			{loading && <Loader />}
+			<AuthContext.Provider value={value}>
+				{props.children}
+			</AuthContext.Provider>
+		</>
 	);
 };
