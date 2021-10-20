@@ -14,6 +14,13 @@ const AuthReducer = (state, action) => {
 				error: false,
 				token: localStorage.getItem('social-snap-token'),
 			};
+		case 'ACCOUNT_UPDATE':
+			return {
+				user: null,
+				isFetching: false,
+				error: false,
+				token: localStorage.getItem('social-snap-token'),
+			};
 		case 'LOGIN_FAILURE':
 			return {
 				user: null,

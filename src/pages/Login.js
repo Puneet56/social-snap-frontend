@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import { loginCall } from '../apiCalls';
@@ -12,7 +12,7 @@ const Login = () => {
 	const email = useRef();
 	const password = useRef();
 	const history = useHistory();
-	const { dispatch, error, user, token } = useAuth();
+	const { dispatch, error, user } = useAuth();
 
 	useEffect(() => {
 		if (user && typeof user === 'object') {
@@ -37,7 +37,6 @@ const Login = () => {
 
 	return (
 		<>
-			<p>{token}</p>
 			<div className=' h-full items-center justify-center flex flex-col'>
 				<p className='text-3xl lg:text-7xl lg:font-medium m-5'>
 					Welcome To Social Snap

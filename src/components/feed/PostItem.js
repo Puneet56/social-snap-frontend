@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between
 `;
@@ -21,8 +22,10 @@ const LikeLogo = tw.div`mx-2 bg-gradient-to-b from-[#17a8fd] to-[#046ce4] text-w
 const url = process.env.REACT_APP_URL;
 
 function PostItem({ post }) {
-	const { userId, image, likes, comments, description } = post;
-	const [user, setUser] = useState();
+	const { userId, image, likes, comments, description, _id } = post;
+	const [likesNumber, setLikes] = useState(likes.length);
+	const [showuser, setUser] = useState();
+	const { user } = useAuth();
 
 	useEffect(() => {
 		const getUserdetails = async () => {
@@ -36,15 +39,30 @@ function PostItem({ post }) {
 		getUserdetails();
 	}, [userId]);
 
+	const handleLike = async () => {
+		try {
+			const res = await axios.put(url + `/api/posts/${_id}/like`, {
+				userId: user._id,
+			});
+			if (res.status === 200) {
+				setLikes(res.data.likes);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const openPostModal = () => {};
+
 	return (
 		<>
-			{user && (
+			{showuser && (
 				<Container>
-					<Link className='tooltip' to={`/profile/${user._id}`}>
+					<Link className='tooltip' to={`/profile/${showuser._id}`}>
 						<UserInfo>
 							<span className='tooltiptext'>View Profile</span>
-							<UserImage src={user.profilePicture}></UserImage>
-							<p>{user.username}</p>
+							<UserImage src={showuser.profilePicture}></UserImage>
+							<p>{showuser.username}</p>
 						</UserInfo>
 					</Link>
 					<p className='ml-2'>
@@ -55,17 +73,26 @@ function PostItem({ post }) {
 							: description}
 					</p>
 					{/[a-zA-Z]/g.test(image) && (
-						<PostImage src={image} alt={user}></PostImage>
+						<PostImage
+							onClick={openPostModal}
+							src={image}
+							alt='user'
+						></PostImage>
 					)}
 
 					<LikesComments>
-						<div className='flex items-center'>
+						<div
+							className='flex items-center cursor-pointer'
+							onClick={handleLike}
+						>
 							<LikeLogo>
 								<HiThumbUp className='w-8 h-8 p-1' />
 							</LikeLogo>
-							<p>{likes.length} Likes</p>
+							<p>{likesNumber} Likes</p>
 						</div>
-						<p className='mr-2'>{comments} Comments</p>
+						<p onClick={openPostModal} className='mr-2'>
+							{comments} Comments
+						</p>
 					</LikesComments>
 				</Container>
 			)}

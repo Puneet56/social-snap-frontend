@@ -52,7 +52,7 @@ function Navbar() {
 						className='h-4/6 w-4/6 transform transition-all ease-in-out duration-100'
 						exact
 						activeClassName='h-full flex items-center justify-center border-b-4 w-3/5 text-center border-solid border-[#046ce4]'
-						to='/friends'
+						to='/users'
 					>
 						<FaUserFriends className='mx-auto h-5/6 w-5/6 mb-3' />
 					</NavLink>

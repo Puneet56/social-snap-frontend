@@ -28,7 +28,7 @@ const App = () => {
 							<PrivateRoute exact path='/'>
 								<Home />
 							</PrivateRoute>
-							<PrivateRoute exact path='/friends'>
+							<PrivateRoute exact path='/users'>
 								<Friends />
 							</PrivateRoute>
 							<PrivateRoute exact path='/notifications'>

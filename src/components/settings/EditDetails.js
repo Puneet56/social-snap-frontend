@@ -1,106 +1,145 @@
 import axios from 'axios';
-import { useEffect, useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import Loader from '../loader/Loader';
 import { useAuth } from '../../context/AuthContext';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
-const UserImage = tw.div`overflow-hidden relative rounded-full w-24 h-24 bg-fbhover origin-center  object-contain object-center z-30
+const UserImage = tw.div`overflow-hidden relative rounded-full min-w-[8rem] min-h-[8rem] my-5 bg-fbhover origin-center object-contain object-center z-30
 `;
-
-const EditProfile = tw.button`h-10 m-1 px-5 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-500 focus:outline-none disabled:cursor-not-allowed
+const EditProfile = tw.button`min-h-[3rem] m-1 px-5 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-500 focus:outline-none disabled:cursor-not-allowed
 `;
 
 const url = process.env.REACT_APP_URL;
 
 const EditDetails = () => {
-	const { user, error, dispatch, isFetching } = useAuth();
+	const { user, isFetching } = useAuth();
+	const [showuser, setUser] = useState(user);
+
+	const [error, setError] = useState();
 
 	const username = useRef();
-	const email = useRef();
 	const password = useRef();
 	const dob = useRef();
 	const hometown = useRef();
+	const description = useRef();
 	const history = useHistory();
+
+	useEffect(() => {
+		const getUserdetails = async () => {
+			try {
+				const fetchedUser = await axios.get(url + `/api/users/${user._id}`);
+				setUser(fetchedUser.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getUserdetails();
+	}, [user, error]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		dispatch({ type: 'LOGIN_START' });
-		try {
-			const user = await axios.post(url + '/api/auth/register', {
-				username: username.current.value,
-				email: email.current.value,
-				password: password.current.value,
-				dob: dob.current.value,
-				hometown: hometown.current.value,
-			});
-			localStorage.setItem('social-snap-token', user.data.token);
-			dispatch({ type: 'LOGIN_SUCCESS', payload: user.data.user });
-		} catch (error) {
-			dispatch({ type: 'LOGIN_FAILURE', err: error });
+
+		let data = {};
+
+		data.userId = user._id;
+
+		if (username.current.value !== '') {
+			data.username = username.current.value;
+		}
+		if (password.current.value !== '') {
+			data.password = password.current.value;
+		}
+		if (dob.current.value !== '') {
+			data.dob = dob.current.value;
+		}
+		if (hometown.current.value !== '') {
+			data.hometown = hometown.current.value;
+		}
+		if (description.current.value !== '') {
+			data.description = description.current.value;
+		}
+
+		if (
+			username.current.value !== '' ||
+			password.current.value !== '' ||
+			dob.current.value !== '' ||
+			hometown.current.value !== '' ||
+			description.current.value !== ''
+		) {
+			try {
+				const res = await axios.put(url + `/api/users/${user._id}`, data);
+				setError(res.data);
+				setTimeout(() => {
+					history.push(`/profile/${user._id}`);
+				}, 1000);
+			} catch (error) {
+				console.log(error);
+				setError('Error updating Profile');
+			}
+		} else {
+			setError('Nothing to Update');
 		}
 	};
+
+	const editProfile = () => {};
 
 	return (
 		<>
 			{isFetching && <Loader />}
-			<div className=' h-full items-center justify-start flex flex-col mb-48'>
-				{error ? (
-					typeof error === 'string' ? (
-						<h1>{error}</h1>
-					) : (
-						<h1>Some error occoured</h1>
-					)
-				) : (
-					''
-				)}
+			<div className=' h-full items-center justify-start flex flex-col mb-60'>
+				<div></div>
+				<UserImage>
+					<img
+						src={user.profilePicture}
+						alt='user'
+						className='w-full h-full'
+					></img>
+				</UserImage>
+
+				<EditProfile onClick={editProfile}>Set Profile Picture</EditProfile>
 				<form
 					onSubmit={handleSubmit}
 					className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'
 				>
 					<h1 className='text-4xl font-bold'>Edit Details</h1>
-					<UserImage>
-						<img
-							src={user.profilePicture}
-							alt='user'
-							className='w-full h-full'
-						></img>
-					</UserImage>
-
-					<EditProfile>Set Profile Picture</EditProfile>
-
 					<label>Set Full Name</label>
 					<Input
-						required
 						type='text'
-						placeholder={user.username}
+						placeholder={showuser.username}
 						ref={username}
 					></Input>
 					<label>Update Description</label>
 					<Input
-						required
 						type='text'
 						placeholder='Describe Yourself'
-						ref={username}
+						ref={description}
 					></Input>
 					<label>Set Date of Birth</label>
-					<Input type='date' required ref={dob}></Input>
+					<Input type='date' ref={dob}></Input>
 					<label>Enter Hometown</label>
 					<Input
 						type='text'
-						required
-						placeholder={user.hometown}
+						placeholder={showuser.hometown}
 						ref={hometown}
 					></Input>
 					<label>Set New Password</label>
 					<Input
-						required
 						type='password'
 						placeholder='New password'
 						ref={password}
 					></Input>
+					{error ? (
+						typeof error === 'string' ? (
+							<h1>{error}</h1>
+						) : (
+							<h1>Some error occoured</h1>
+						)
+					) : (
+						''
+					)}
 					<button
 						type='submit'
 						className='w-36 h-12 mt-5 rounded-sm bg-blue-700 text-center border-solid border border-blue-700'
