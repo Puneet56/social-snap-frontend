@@ -8,8 +8,6 @@ import { signUpCall } from '../apiCalls';
 const Input = tw.input`h-9 text-gray-300 rounded-full px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
 
-const url = process.env.REACT_APP_URL;
-
 const SignUp = () => {
 	const { user, error, dispatch, isFetching } = useAuth();
 	const username = useRef();
@@ -18,8 +16,6 @@ const SignUp = () => {
 	const dob = useRef();
 	const hometown = useRef();
 	const history = useHistory();
-
-	console.log(url);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
