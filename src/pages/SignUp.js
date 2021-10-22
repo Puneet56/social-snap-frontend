@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import Loader from '../components/loader/Loader';
 import { useAuth } from '../context/AuthContext';
+import { signUpCall } from '../apiCalls';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
@@ -23,20 +23,15 @@ const SignUp = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		dispatch({ type: 'LOGIN_START' });
-		try {
-			const user = await axios.post(url + '/api/auth/register', {
-				username: username.current.value,
-				email: email.current.value,
-				password: password.current.value,
-				dob: dob.current.value,
-				hometown: hometown.current.value,
-			});
-			localStorage.setItem('social-snap-token', user.data.token);
-			dispatch({ type: 'LOGIN_SUCCESS', payload: user.data.user });
-		} catch (error) {
-			dispatch({ type: 'LOGIN_FAILURE', err: error });
-		}
+		const userCredentials = {
+			username: username.current.value,
+			email: email.current.value,
+			password: password.current.value,
+			dob: dob.current.value,
+			hometown: hometown.current.value,
+		};
+
+		signUpCall(userCredentials, dispatch);
 	};
 
 	useEffect(() => {

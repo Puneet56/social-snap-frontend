@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import Loader from '../loader/Loader';
 import { useAuth } from '../../context/AuthContext';
+import Compressor from 'compressorjs';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
-const UserImage = tw.div`overflow-hidden relative rounded-full min-w-[8rem] min-h-[8rem] my-5 bg-fbhover origin-center object-contain object-center z-30
+const UserImage = tw.div`overflow-hidden relative rounded-full min-w-[8rem] min-h-[8rem] max-w-[8rem] max-h-[8rem] my-5 bg-fbhover origin-center object-center z-30
 `;
 const EditProfile = tw.button`min-h-[3rem] m-1 px-5 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-500 focus:outline-none disabled:cursor-not-allowed
 `;
@@ -17,7 +18,8 @@ const url = process.env.REACT_APP_URL;
 const EditDetails = () => {
 	const { user, isFetching } = useAuth();
 	const [showuser, setUser] = useState(user);
-
+	const compressedref = useRef();
+	const imageInput = useRef();
 	const [error, setError] = useState();
 
 	const username = useRef();
@@ -84,7 +86,40 @@ const EditDetails = () => {
 		}
 	};
 
-	const editProfile = () => {};
+	const editProfilePhoto = (event) => {
+		console.log('happened');
+		const image = event.target.files[0];
+		new Compressor(image, {
+			quality: 0.8,
+			maxWidth: 250,
+			maxHeight: 250,
+			resize: 'cover',
+			success: (compressedResult) => {
+				const reader = new FileReader();
+				console.log('reached happened');
+				reader.onload = (event) => {
+					console.log('reached here');
+					compressedref.current.src = event.target.result;
+					console.log(event.target.result);
+					axios
+						.put(url + `/api/users/${user._id}`, {
+							userId: user._id,
+							profilePicture: event.target.result,
+						})
+						.then((res) => {
+							console.log(res);
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+				};
+				reader.readAsDataURL(compressedResult);
+			},
+			error(err) {
+				console.log(err);
+			},
+		});
+	};
 
 	return (
 		<>
@@ -94,12 +129,21 @@ const EditDetails = () => {
 				<UserImage>
 					<img
 						src={user.profilePicture}
+						ref={compressedref}
 						alt='user'
-						className='w-full h-full'
+						className='w-full h-full object-cover'
 					></img>
 				</UserImage>
-
-				<EditProfile onClick={editProfile}>Set Profile Picture</EditProfile>
+				<input
+					accept='image/*'
+					type='file'
+					ref={imageInput}
+					onChange={editProfilePhoto}
+					className='hidden'
+				/>
+				<EditProfile onClick={() => imageInput.current.click()}>
+					Set Profile Picture
+				</EditProfile>
 				<form
 					onSubmit={handleSubmit}
 					className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'

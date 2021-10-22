@@ -2,7 +2,7 @@ import React, { useEffect, useContext, createContext, useReducer } from 'react';
 import axios from 'axios';
 
 import AuthReducer from './AuthReducer';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import Loader from '../components/loader/Loader';
 
 const AuthContext = createContext();

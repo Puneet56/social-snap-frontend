@@ -17,7 +17,7 @@ function FriendItem({ friend }) {
 					<img
 						src={profilePicture}
 						alt='friend'
-						className='h-full w-full m-auto'
+						className='h-full mx-auto'
 					></img>
 				</ImageDiv>
 				<p className='w-full text-center h-1/4 flex items-center justify-center'>
