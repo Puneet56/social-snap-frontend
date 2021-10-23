@@ -4,6 +4,7 @@ import tw from 'tailwind-styled-components';
 import Loader from '../components/loader/Loader';
 import { useAuth } from '../context/AuthContext';
 import { signUpCall } from '../apiCalls';
+import GuestUser from '../components/user/GuestUser';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
@@ -55,6 +56,7 @@ const SignUp = () => {
 				) : (
 					''
 				)}
+				<GuestUser />
 				<form
 					onSubmit={handleSubmit}
 					className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'

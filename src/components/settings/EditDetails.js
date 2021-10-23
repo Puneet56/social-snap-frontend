@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import Loader from '../loader/Loader';
 import { useAuth } from '../../context/AuthContext';
@@ -27,7 +26,6 @@ const EditDetails = () => {
 	const dob = useRef();
 	const hometown = useRef();
 	const description = useRef();
-	const history = useHistory();
 
 	useEffect(() => {
 		const getUserdetails = async () => {
@@ -74,12 +72,12 @@ const EditDetails = () => {
 			try {
 				const res = await axios.put(url + `/api/users/${user._id}`, data);
 				setError(res.data);
-				setTimeout(() => {
-					history.push(`/profile/${user._id}`);
-				}, 1000);
-			} catch (error) {
-				console.log(error);
+				alert(res.data);
+				username.current.value = '';
+			} catch (err) {
+				console.log(err);
 				setError('Error updating Profile');
+				alert(error);
 			}
 		} else {
 			setError('Nothing to Update');
@@ -124,7 +122,7 @@ const EditDetails = () => {
 	return (
 		<>
 			{isFetching && <Loader />}
-			<div className=' h-full items-center justify-start flex flex-col mb-60'>
+			<div className=' h-full items-center justify-start flex flex-col mb-80'>
 				<div></div>
 				<UserImage>
 					<img

@@ -3,6 +3,7 @@ import { useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import { loginCall } from '../apiCalls';
+import GuestUser from '../components/user/GuestUser';
 import { useAuth } from '../context/AuthContext';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full pl-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
@@ -53,6 +54,7 @@ const Login = () => {
 				) : (
 					''
 				)}
+				<GuestUser />
 				<form
 					onSubmit={handleSubmit}
 					className='bg-fbnav border border-solid rounded-lg m-2 flex flex-col items-center justify-center space-y-4 p-4 w-96'
