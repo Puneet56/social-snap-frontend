@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BiLoaderAlt } from 'react-icons/bi';
 import tw from 'tailwind-styled-components';
 import CreatePost from '../CreatePost';
 import PostItem from './PostItem';
@@ -11,17 +12,21 @@ const url = process.env.REACT_APP_URL;
 
 function Posts(props) {
 	const [posts, setPosts] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const { user } = useAuth();
 
 	useEffect(() => {
+		setLoading(true);
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
 					url + `/api/posts/timeline/${user._id}`
 				);
 				setPosts(fetchedposts.data);
+				setLoading(false);
 			} catch (error) {
 				console.log(error);
+				setLoading(false);
 			}
 		};
 		getPosts();
@@ -31,11 +36,21 @@ function Posts(props) {
 		<>
 			<Container>
 				{props.home && <CreatePost />}
-				{posts
-					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-					.map((post) => {
-						return <PostItem post={post} key={post._id} />;
-					})}
+				{loading ? (
+					<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
+				) : (
+					<>
+						{posts.length === 0 ? (
+							<p>No Posts, Create One or Follow others to see their posts</p>
+						) : (
+							posts
+								.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+								.map((post) => {
+									return <PostItem post={post} key={post._id} />;
+								})
+						)}
+					</>
+				)}
 			</Container>
 		</>
 	);

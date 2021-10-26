@@ -36,13 +36,13 @@ function Friends() {
 			<Heading>Followers</Heading>
 			<FriendList>
 				{user.followers.map((friend) => (
-					<FriendItem id={friend} key={friend._id} />
+					<FriendItem id={friend} key={friend} />
 				))}
 			</FriendList>
-			<Heading>All Users</Heading>
+			<Heading>Following</Heading>
 			<FriendList>
 				{user.following.map((friend) => (
-					<FriendItem id={friend} key={friend._id} />
+					<FriendItem id={friend} key={friend} />
 				))}
 			</FriendList>
 			<Heading>All Users</Heading>

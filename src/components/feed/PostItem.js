@@ -5,7 +5,7 @@ import { AiFillEdit } from 'react-icons/ai';
 import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import EditPost from '../modal/EditPost';
+import Modal from '../modal/Modal';
 
 const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between relative
 `;
@@ -56,11 +56,16 @@ function PostItem({ post }) {
 		}
 	};
 
-	const openPostModal = () => {};
+	const closePostModal = () => {
+		setOpenModal(false);
+	};
+	const openPostModal = () => {
+		setOpenModal(true);
+	};
 
 	return (
 		<>
-			{openModal && <EditPost close={setOpenModal} />}
+			{openModal && <Modal close={closePostModal} />}
 			{showuser && (
 				<Container>
 					<Link className='tooltip' to={`/profile/${showuser._id}`}>

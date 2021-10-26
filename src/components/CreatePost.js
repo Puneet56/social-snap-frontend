@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { MdPhotoLibrary } from 'react-icons/md';
-import { BiSend } from 'react-icons/bi';
+import { BiSend, BiLoaderAlt } from 'react-icons/bi';
 import { useAuth } from '../context/AuthContext';
 import Compressor from 'compressorjs';
 import axios from 'axios';
@@ -19,14 +19,17 @@ const BouttonsDiv = tw.div`flex items-center justify-center hover:bg-fbhover p-1
 `;
 const url = process.env.REACT_APP_URL;
 
-function CreatePost() {
+function CreatePost(props) {
 	const { user } = useAuth();
 	const inputRef = useRef();
 	const imageRef = useRef();
 	const imageInputRef = useRef();
 	const history = useHistory();
 
+	const [loading, setLoading] = useState(false);
+
 	const showImage = (event) => {
+		setLoading(true);
 		const image = event.target.files[0];
 		new Compressor(image, {
 			quality: 0.6,
@@ -36,43 +39,51 @@ function CreatePost() {
 			success: (compressedResult) => {
 				const reader = new FileReader();
 				reader.onload = (event) => {
-					console.log(imageRef);
 					imageRef.current.src = event.target.result;
-					console.log(event.target.result);
+					setLoading(false);
 				};
 				reader.readAsDataURL(compressedResult);
 			},
 			error(err) {
+				setLoading(false);
 				console.log(err);
 			},
 		});
 	};
 
 	const sendPost = async () => {
+		setLoading(true);
 		if (
 			!/[a-zA-Z]/g.test(inputRef.current.value) ||
 			!/[a-zA-Z]/g.test(imageRef.current.src)
 		) {
 			alert('Enter Something in Input or Select an Image');
+			setLoading(false);
 			return;
 		}
 		if (inputRef.current.value.length > 500) {
 			alert('Enter less than 500 characters');
+			setLoading(false);
 			return;
 		}
 
 		const data = {
 			userId: user._id,
 			description: inputRef.current.value,
-			image: imageRef.current.src,
+			image:
+				imageRef.current.src === 'http://localhost:3000/'
+					? ''
+					: imageRef.current.src,
 		};
 		try {
 			const res = await axios.post(url + '/api/posts', data);
 			if (res.status === 200) {
+				setLoading(false);
 				history.go(0);
 			}
 		} catch (error) {
 			alert('Some Error Occoured');
+			setLoading(false);
 			console.log(error);
 		}
 	};
@@ -107,7 +118,13 @@ function CreatePost() {
 					<p>Photo/Video</p>
 				</BouttonsDiv>
 				<BouttonsDiv onClick={sendPost}>
-					Send Post <BiSend className='text-yellow-500 w-8 h-8 mr-2' />
+					{!loading ? (
+						<>
+							Send Post <BiSend className='text-yellow-500 w-8 h-8 mx-2' />
+						</>
+					) : (
+						<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
+					)}
 				</BouttonsDiv>
 			</div>
 		</Container>
