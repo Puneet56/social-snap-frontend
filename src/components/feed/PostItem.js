@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { HiThumbUp } from 'react-icons/hi';
 import axios from 'axios';
-
+import { AiFillEdit } from 'react-icons/ai';
 import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import EditPost from '../modal/EditPost';
 
-const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between
+const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between relative
 `;
 const UserInfo = tw.div`w-full h-16 p-1 flex items-center justify-start
 `;
@@ -18,6 +19,8 @@ const LikesComments = tw.div`w-full h-16 flex items-center justify-between
 `;
 const LikeLogo = tw.div`mx-2 bg-gradient-to-b from-[#17a8fd] to-[#046ce4] text-white rounded-full flex items-center justify-center
 `;
+const EditButton = tw.div`absolute right-6 top-6 w-16 h-8 flex items-center justify-center cursor-pointer
+`;
 
 const url = process.env.REACT_APP_URL;
 
@@ -26,6 +29,7 @@ function PostItem({ post }) {
 	const [likesNumber, setLikes] = useState(likes.length);
 	const [showuser, setUser] = useState();
 	const { user } = useAuth();
+	const [openModal, setOpenModal] = useState(false);
 
 	useEffect(() => {
 		const getUserdetails = async () => {
@@ -56,6 +60,7 @@ function PostItem({ post }) {
 
 	return (
 		<>
+			{openModal && <EditPost close={setOpenModal} />}
 			{showuser && (
 				<Container>
 					<Link className='tooltip' to={`/profile/${showuser._id}`}>
@@ -65,6 +70,11 @@ function PostItem({ post }) {
 							<p>{showuser.username}</p>
 						</UserInfo>
 					</Link>
+					{user._id === userId && (
+						<EditButton onClick={() => setOpenModal(true)}>
+							<AiFillEdit className='w-full h-full' /> Edit
+						</EditButton>
+					)}
 					<p className='ml-2'>
 						{description.length > 50
 							? image.length !== 0
