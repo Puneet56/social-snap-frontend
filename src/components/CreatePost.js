@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import tw from 'tailwind-styled-components';
 import { MdPhotoLibrary } from 'react-icons/md';
 import { BiSend } from 'react-icons/bi';
@@ -21,7 +21,6 @@ const url = process.env.REACT_APP_URL;
 
 function CreatePost() {
 	const { user } = useAuth();
-	const [postImage, setImage] = useState(false);
 	const inputRef = useRef();
 	const imageRef = useRef();
 	const imageInputRef = useRef();
@@ -37,7 +36,6 @@ function CreatePost() {
 			success: (compressedResult) => {
 				const reader = new FileReader();
 				reader.onload = (event) => {
-					setImage(true);
 					console.log(imageRef);
 					imageRef.current.src = event.target.result;
 					console.log(event.target.result);
