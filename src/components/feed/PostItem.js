@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HiThumbUp } from 'react-icons/hi';
+import { BiLoaderAlt } from 'react-icons/bi';
 import axios from 'axios';
 import { AiFillEdit } from 'react-icons/ai';
 import tw from 'tailwind-styled-components';
@@ -30,29 +31,37 @@ function PostItem({ post }) {
 	const [showuser, setUser] = useState();
 	const { user } = useAuth();
 	const [openModal, setOpenModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [liking, setLiking] = useState(false);
 
 	useEffect(() => {
+		setLoading(true);
 		const getUserdetails = async () => {
 			try {
 				const fetchedUser = await axios.get(url + `/api/users/${userId}`);
 				setUser(fetchedUser.data);
+				setLoading(false);
 			} catch (error) {
 				console.log(error);
+				setLoading(false);
 			}
 		};
 		getUserdetails();
 	}, [userId]);
 
 	const handleLike = async () => {
+		setLiking(true);
 		try {
 			const res = await axios.put(url + `/api/posts/${_id}/like`, {
 				userId: user._id,
 			});
 			if (res.status === 200) {
 				setLikes(res.data.likes);
+				setLiking(false);
 			}
 		} catch (error) {
 			console.log(error);
+			setLiking(false);
 		}
 	};
 
@@ -66,50 +75,60 @@ function PostItem({ post }) {
 	return (
 		<>
 			{openModal && <Modal close={closePostModal} />}
-			{showuser && (
-				<Container>
-					<Link className='tooltip' to={`/profile/${showuser._id}`}>
-						<UserInfo>
-							<span className='tooltiptext'>View Profile</span>
-							<UserImage src={showuser.profilePicture}></UserImage>
-							<p>{showuser.username}</p>
-						</UserInfo>
-					</Link>
-					{user._id === userId && (
-						<EditButton onClick={() => setOpenModal(true)}>
-							<AiFillEdit className='w-full h-full' /> Edit
-						</EditButton>
-					)}
-					<p className='ml-2'>
-						{description.length > 50
-							? image.length !== 0
-								? `${description.slice(0, 50)} ...view more`
-								: description
-							: description}
-					</p>
-					{/[a-zA-Z]/g.test(image) && (
-						<PostImage
-							onClick={openPostModal}
-							src={image}
-							alt='user'
-						></PostImage>
-					)}
+			{loading ? (
+				<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
+			) : (
+				<>
+					{showuser && (
+						<Container>
+							<Link className='tooltip' to={`/profile/${showuser._id}`}>
+								<UserInfo>
+									<span className='tooltiptext'>View Profile</span>
+									<UserImage src={showuser.profilePicture}></UserImage>
+									<p>{showuser.username}</p>
+								</UserInfo>
+							</Link>
+							{user._id === userId && (
+								<EditButton onClick={() => setOpenModal(true)}>
+									<AiFillEdit className='w-full h-full' /> Edit
+								</EditButton>
+							)}
+							<p className='ml-2'>
+								{description.length > 50
+									? image.length !== 0
+										? `${description.slice(0, 50)} ...view more`
+										: description
+									: description}
+							</p>
+							{/[a-zA-Z]/g.test(image) && (
+								<PostImage
+									onClick={openPostModal}
+									src={image}
+									alt='user'
+								></PostImage>
+							)}
 
-					<LikesComments>
-						<div
-							className='flex items-center cursor-pointer'
-							onClick={handleLike}
-						>
-							<LikeLogo>
-								<HiThumbUp className='w-8 h-8 p-1' />
-							</LikeLogo>
-							<p>{likesNumber} Likes</p>
-						</div>
-						<p onClick={openPostModal} className='mr-2'>
-							{comments} Comments
-						</p>
-					</LikesComments>
-				</Container>
+							<LikesComments>
+								{liking ? (
+									<p className='ml-8'>Liking...</p>
+								) : (
+									<div
+										className='flex items-center cursor-pointer'
+										onClick={handleLike}
+									>
+										<LikeLogo>
+											<HiThumbUp className='w-8 h-8 p-1' />
+										</LikeLogo>
+										<p>{likesNumber} Likes</p>
+									</div>
+								)}
+								<p onClick={openPostModal} className='mr-2'>
+									{comments} Comments
+								</p>
+							</LikesComments>
+						</Container>
+					)}
+				</>
 			)}
 		</>
 	);
