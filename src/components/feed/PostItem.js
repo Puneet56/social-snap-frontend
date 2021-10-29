@@ -8,10 +8,11 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Modal from '../modal/Modal';
 import EditPost from '../modal/EditPost';
+import TimesAgo from 'react-timesago';
 
 const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between relative
 `;
-const UserInfo = tw.div`w-full h-16 p-1 flex items-center justify-start
+const UserInfo = tw.div`w-full h-[4.3rem] p-1 flex items-center justify-start
 `;
 const UserImage = tw.img`h-[80%] rounded-full bg-fbhover mx-2	object-cover  
 `;
@@ -26,8 +27,8 @@ const EditButton = tw.div`absolute right-6 top-6 w-16 h-8 flex items-center just
 
 const url = process.env.REACT_APP_URL;
 
-function PostItem({ post, deletePostFromState }) {
-	const { userId, image, likes, comments, description, _id } = post;
+function PostItem({ post, deletePostFromState, editPostInState }) {
+	const { userId, image, likes, comments, description, _id, createdAt } = post;
 	const [likesNumber, setLikes] = useState(likes.length);
 	const [showuser, setUser] = useState();
 	const { user } = useAuth();
@@ -77,7 +78,11 @@ function PostItem({ post, deletePostFromState }) {
 		<>
 			{openModal && (
 				<Modal close={closePostModal}>
-					<EditPost post={post} deletePostFromState={deletePostFromState} />
+					<EditPost
+						post={post}
+						deletePostFromState={deletePostFromState}
+						editPostInState={editPostInState}
+					/>
 				</Modal>
 			)}
 			{loading ? (
@@ -90,9 +95,15 @@ function PostItem({ post, deletePostFromState }) {
 								<UserInfo>
 									<span className='tooltiptext'>View Profile</span>
 									<UserImage src={showuser.profilePicture}></UserImage>
-									<p>{showuser.username}</p>
+									<div>
+										<p>{showuser.username}</p>
+										<p className='text-xs text-gray-400'>
+											<TimesAgo time={createdAt} type='default' suffix='ago' />
+										</p>
+									</div>
 								</UserInfo>
 							</Link>
+
 							{user._id === userId && (
 								<EditButton onClick={() => setOpenModal(true)}>
 									<AiFillEdit className='w-full h-full' /> Edit
@@ -127,9 +138,7 @@ function PostItem({ post, deletePostFromState }) {
 										<p>{likesNumber} Likes</p>
 									</div>
 								)}
-								<p onClick={openPostModal} className='mr-2'>
-									{comments} Comments
-								</p>
+								<p className='mr-2'>{comments} Comments</p>
 							</LikesComments>
 						</Container>
 					)}

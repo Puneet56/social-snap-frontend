@@ -79,11 +79,13 @@ function CreatePost({ addPost }) {
 			if (res.status === 200) {
 				addPost(res.data);
 				inputRef.current.value = '';
+				imageRef.current.src = '';
 				setLoading(false);
 			}
 		} catch (error) {
 			alert('Some Error Occoured');
 			inputRef.current.value = '';
+			imageRef.current.src = '';
 			setLoading(false);
 			console.log(error);
 		}

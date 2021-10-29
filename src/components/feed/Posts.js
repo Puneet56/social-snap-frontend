@@ -61,6 +61,15 @@ function Posts(props) {
 		}
 	};
 
+	const editPostHandler = (editedPost) => {
+		setPosts((prevPosts) => {
+			const otherPosts = prevPosts.filter(
+				(item) => item._id !== editedPost._id
+			);
+			return [editedPost, ...otherPosts];
+		});
+	};
+
 	return (
 		<>
 			<Container>
@@ -80,6 +89,7 @@ function Posts(props) {
 											post={post}
 											key={post._id}
 											deletePostFromState={deletePost}
+											editPostInState={editPostHandler}
 										/>
 									);
 								})
