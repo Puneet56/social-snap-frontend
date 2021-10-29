@@ -14,6 +14,7 @@ const url = process.env.REACT_APP_URL;
 function Posts(props) {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [postsLoading, setPostsLoading] = useState(false);
 	const [page, setPage] = useState(1);
 
 	const { user } = useAuth();
@@ -44,19 +45,20 @@ function Posts(props) {
 	};
 
 	const getMorePosts = async () => {
-		console.log(url + `/api/posts/timeline/${user._id}/?page=${page + 1}`);
-		console.log('fetching');
+		setPostsLoading(true);
 		try {
 			const fetchedposts = await axios.get(
 				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`
 			);
-			setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
-			setLoading(false);
+			if (fetchedposts.data.length !== 0) {
+				setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
+				setPage(page + 1);
+			}
+			setPostsLoading(false);
 		} catch (error) {
 			console.log(error);
-			setLoading(false);
+			setPostsLoading(false);
 		}
-		setPage(page + 1);
 	};
 
 	return (
@@ -82,7 +84,17 @@ function Posts(props) {
 									);
 								})
 						)}
-						<button onClick={getMorePosts}>See more</button>
+						<button
+							className='px-2 py-3 active:outline-none'
+							disabled={postsLoading}
+							onClick={getMorePosts}
+						>
+							{postsLoading ? (
+								<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
+							) : (
+								'See More'
+							)}
+						</button>
 					</>
 				)}
 			</Container>

@@ -7,6 +7,7 @@ import Loader from '../components/loader/Loader';
 import CreatePost from '../components/CreatePost';
 import { useAuth } from '../context/AuthContext';
 import UserInfo from '../components/user/UserInfo';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 const Container = tw.div`w-full max-h-full max-w-2xl mx-auto overflow-y-auto
 `;
@@ -22,6 +23,7 @@ function Profile() {
 	const [posts, setPosts] = useState([]);
 	const [showuser, setshowUser] = useState([]);
 	const [page, setPage] = useState(1);
+	const [postsLoading, setPostsLoading] = useState(false);
 
 	const { user } = useAuth();
 
@@ -65,17 +67,19 @@ function Profile() {
 	};
 
 	const getMorePosts = async () => {
-		console.log(url + `/api/posts/timeline/${user._id}/?page=${page + 1}`);
-		console.log('fetching');
+		setPostsLoading(true);
 		try {
 			const fetchedposts = await axios.get(
-				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`
+				url + `/api/posts/posts/${user._id}/?page=${page + 1}`
 			);
-			setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
-			setLoading(false);
+			if (fetchedposts.data.length !== 0) {
+				setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
+				setPage(page + 1);
+			}
+			setPostsLoading(false);
 		} catch (error) {
 			console.log(error);
-			setLoading(false);
+			setPostsLoading(false);
 		}
 		setPage(page + 1);
 	};
@@ -104,14 +108,26 @@ function Profile() {
 				)}
 				{posts
 					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-					.map((post) => (
-						<PostItem
-							post={post}
-							key={post._id}
-							deletePostFromState={deletePost}
-						/>
-					))}
-				<button onClick={getMorePosts}>See more</button>
+					.map((post) => {
+						return (
+							<PostItem
+								post={post}
+								key={post._id}
+								deletePostFromState={deletePost}
+							/>
+						);
+					})}
+				<button
+					className='px-2 py-3 active:outline-none'
+					disabled={postsLoading}
+					onClick={getMorePosts}
+				>
+					{postsLoading ? (
+						<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
+					) : (
+						'See More'
+					)}
+				</button>
 			</div>
 		</Container>
 	);
