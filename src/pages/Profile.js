@@ -21,6 +21,8 @@ function Profile() {
 	const [loading, setLoading] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const [showuser, setshowUser] = useState([]);
+	const [page, setPage] = useState(1);
+
 	const { user } = useAuth();
 
 	const params = useParams();
@@ -41,7 +43,7 @@ function Profile() {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/posts/${params.userid}`
+					url + `/api/posts/posts/${params.userid}/?page=1`
 				);
 				setPosts(fetchedposts.data);
 				setLoading(false);
@@ -53,6 +55,30 @@ function Profile() {
 		getUserdetails();
 		getPosts();
 	}, [params.userid, user]);
+
+	const addPost = (newPost) => {
+		setPosts((prevPosts) => [...prevPosts, newPost]);
+	};
+
+	const deletePost = (post) => {
+		setPosts((prevPosts) => prevPosts.filter((item) => item._id !== post._id));
+	};
+
+	const getMorePosts = async () => {
+		console.log(url + `/api/posts/timeline/${user._id}/?page=${page + 1}`);
+		console.log('fetching');
+		try {
+			const fetchedposts = await axios.get(
+				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`
+			);
+			setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+		}
+		setPage(page + 1);
+	};
 
 	return (
 		<Container>
@@ -73,10 +99,19 @@ function Profile() {
 			</UserImage>
 			<div className='w-full max-w-lg mx-auto mb-28 flex flex-col items-center justify-start'>
 				{showuser && <UserInfo user={showuser} />}
-				{showuser && params.userid === user._id && <CreatePost />}
-				{posts.map((post) => (
-					<PostItem post={post} key={post._id} />
-				))}
+				{showuser && params.userid === user._id && (
+					<CreatePost addPost={addPost} />
+				)}
+				{posts
+					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+					.map((post) => (
+						<PostItem
+							post={post}
+							key={post._id}
+							deletePostFromState={deletePost}
+						/>
+					))}
+				<button onClick={getMorePosts}>See more</button>
 			</div>
 		</Container>
 	);

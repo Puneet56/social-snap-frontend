@@ -6,13 +6,16 @@ import PostItem from './PostItem';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
-const Container = tw.div`w-full h-[90%] overflow-x-hidden overflow-y-auto flex flex-col items-center justify-start mb-96
+const Container = tw.div`w-full h-[90%] overflow-x-hidden overflow-y-auto flex flex-col items-center justify-start pb-14
 `;
+
 const url = process.env.REACT_APP_URL;
 
 function Posts(props) {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [page, setPage] = useState(1);
+
 	const { user } = useAuth();
 
 	useEffect(() => {
@@ -20,7 +23,7 @@ function Posts(props) {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/timeline/${user._id}`
+					url + `/api/posts/timeline/${user._id}/?page=1`
 				);
 				setPosts(fetchedposts.data);
 				setLoading(false);
@@ -32,10 +35,34 @@ function Posts(props) {
 		getPosts();
 	}, [user]);
 
+	const addPost = (newPost) => {
+		setPosts((prevPosts) => [...prevPosts, newPost]);
+	};
+
+	const deletePost = (post) => {
+		setPosts((prevPosts) => prevPosts.filter((item) => item._id !== post._id));
+	};
+
+	const getMorePosts = async () => {
+		console.log(url + `/api/posts/timeline/${user._id}/?page=${page + 1}`);
+		console.log('fetching');
+		try {
+			const fetchedposts = await axios.get(
+				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`
+			);
+			setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+		}
+		setPage(page + 1);
+	};
+
 	return (
 		<>
 			<Container>
-				{props.home && <CreatePost />}
+				{props.home && <CreatePost addPost={addPost} />}
 				{loading ? (
 					<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
 				) : (
@@ -46,9 +73,16 @@ function Posts(props) {
 							posts
 								.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 								.map((post) => {
-									return <PostItem post={post} key={post._id} />;
+									return (
+										<PostItem
+											post={post}
+											key={post._id}
+											deletePostFromState={deletePost}
+										/>
+									);
 								})
 						)}
+						<button onClick={getMorePosts}>See more</button>
 					</>
 				)}
 			</Container>

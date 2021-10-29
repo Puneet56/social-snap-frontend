@@ -7,6 +7,7 @@ import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Modal from '../modal/Modal';
+import EditPost from '../modal/EditPost';
 
 const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between relative
 `;
@@ -25,7 +26,7 @@ const EditButton = tw.div`absolute right-6 top-6 w-16 h-8 flex items-center just
 
 const url = process.env.REACT_APP_URL;
 
-function PostItem({ post }) {
+function PostItem({ post, deletePostFromState }) {
 	const { userId, image, likes, comments, description, _id } = post;
 	const [likesNumber, setLikes] = useState(likes.length);
 	const [showuser, setUser] = useState();
@@ -74,7 +75,11 @@ function PostItem({ post }) {
 
 	return (
 		<>
-			{openModal && <Modal close={closePostModal} />}
+			{openModal && (
+				<Modal close={closePostModal}>
+					<EditPost post={post} deletePostFromState={deletePostFromState} />
+				</Modal>
+			)}
 			{loading ? (
 				<BiLoaderAlt className='text-yellow-500 w-8 h-8 mx-2 transform transition-all animate-spin' />
 			) : (

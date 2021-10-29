@@ -5,7 +5,7 @@ import { BiSend, BiLoaderAlt } from 'react-icons/bi';
 import { useAuth } from '../context/AuthContext';
 import Compressor from 'compressorjs';
 import axios from 'axios';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 
 const Container = tw.div`mx-auto max-w-2xl my-3 rounded-2xl w-11/12 bg-fbnav flex flex-col 
 `;
@@ -19,12 +19,13 @@ const BouttonsDiv = tw.div`flex items-center justify-center hover:bg-fbhover p-1
 `;
 const url = process.env.REACT_APP_URL;
 
-function CreatePost(props) {
+function CreatePost({ addPost }) {
 	const { user } = useAuth();
 	const inputRef = useRef();
 	const imageRef = useRef();
 	const imageInputRef = useRef();
-	const history = useHistory();
+	const [addedImage, setAddedImage] = useState(false);
+	// const history = useHistory();
 
 	const [loading, setLoading] = useState(false);
 
@@ -39,6 +40,7 @@ function CreatePost(props) {
 			success: (compressedResult) => {
 				const reader = new FileReader();
 				reader.onload = (event) => {
+					setAddedImage(true);
 					imageRef.current.src = event.target.result;
 					setLoading(false);
 				};
@@ -70,19 +72,18 @@ function CreatePost(props) {
 		const data = {
 			userId: user._id,
 			description: inputRef.current.value,
-			image:
-				imageRef.current.src === 'http://localhost:3000/'
-					? ''
-					: imageRef.current.src,
+			image: !addedImage ? '' : imageRef.current.src,
 		};
 		try {
 			const res = await axios.post(url + '/api/posts', data);
 			if (res.status === 200) {
+				addPost(res.data);
+				inputRef.current.value = '';
 				setLoading(false);
-				history.go(0);
 			}
 		} catch (error) {
 			alert('Some Error Occoured');
+			inputRef.current.value = '';
 			setLoading(false);
 			console.log(error);
 		}
