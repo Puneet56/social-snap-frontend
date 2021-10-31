@@ -11,9 +11,9 @@ const Container = tw.div`mx-auto max-w-2xl my-3 rounded-2xl w-11/12 bg-fbnav fle
 `;
 const InputDiv = tw.div`flex items-center justify-start m-4
 `;
-const UserImage = tw.img`w-[11%] h-[80%] rounded-full m-2 bg-fbhover  object-cover
+const UserImage = tw.img`w-[11%] h-[80%] rounded-full m-2 bg-fbhover object-cover
 `;
-const Input = tw.input`h-9 text-gray-300 rounded-full pl-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
+const Input = tw.textarea`h-9 text-gray-300 rounded-full pt-2 px-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content overflow-hidden
 `;
 const BouttonsDiv = tw.div`flex items-center justify-center hover:bg-fbhover p-1 px-3 rounded-lg cursor-pointer
 `;

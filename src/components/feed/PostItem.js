@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import Modal from '../modal/Modal';
 import EditPost from '../modal/EditPost';
 import TimesAgo from 'react-timesago';
+import ViewPost from '../modal/ViewPost';
 
 const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav flex flex-col items-start justify-between relative
 `;
@@ -33,6 +34,7 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 	const [showuser, setUser] = useState();
 	const { user } = useAuth();
 	const [openModal, setOpenModal] = useState(false);
+	const [viewModal, setViewModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [liking, setLiking] = useState(false);
 
@@ -69,9 +71,14 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 
 	const closePostModal = () => {
 		setOpenModal(false);
+		setViewModal(false);
 	};
 	const openPostModal = () => {
 		setOpenModal(true);
+	};
+
+	const openViewModel = () => {
+		setViewModal(true);
 	};
 
 	return (
@@ -82,6 +89,17 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 						post={post}
 						deletePostFromState={deletePostFromState}
 						editPostInState={editPostInState}
+					/>
+				</Modal>
+			)}
+			{viewModal && (
+				<Modal close={closePostModal}>
+					<ViewPost
+						showuser={showuser}
+						handleLike={handleLike}
+						post={post}
+						liking={liking}
+						likesNumber={likesNumber}
 					/>
 				</Modal>
 			)}
@@ -105,25 +123,24 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 							</Link>
 
 							{user._id === userId && (
-								<EditButton onClick={() => setOpenModal(true)}>
+								<EditButton onClick={openPostModal}>
 									<AiFillEdit className='w-full h-full' /> Edit
 								</EditButton>
 							)}
-							<p className='ml-2'>
+							<p onClick={openViewModel} className='ml-2'>
 								{description.length > 50
 									? image.length !== 0
 										? `${description.slice(0, 50)} ...view more`
 										: description
 									: description}
 							</p>
-							{/[a-zA-Z]/g.test(image) && (
+							{/[a-zA-Z0-9]/g.test(image) && (
 								<PostImage
-									onClick={openPostModal}
+									onClick={openViewModel}
 									src={image}
 									alt='user'
 								></PostImage>
 							)}
-
 							<LikesComments>
 								{liking ? (
 									<p className='ml-8'>Liking...</p>
@@ -138,7 +155,9 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 										<p>{likesNumber} Likes</p>
 									</div>
 								)}
-								<p className='mr-2'>{comments} Comments</p>
+								<p onClick={openViewModel} className='mr-2'>
+									{comments} Comments
+								</p>
 							</LikesComments>
 						</Container>
 					)}
