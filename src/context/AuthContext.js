@@ -24,12 +24,10 @@ export const AuthProvider = (props) => {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
 	const [loading, setLoading] = useState(true);
 
-	console.log(state);
-
 	useEffect(() => {
 		let token = localStorage.getItem('social-snap-token');
-		if (localStorage.getItem('social-snap-token') !== null) {
-			console.log('token found');
+		console.log();
+		if (localStorage.getItem('social-snap-token')) {
 			const verifyToken = async () => {
 				try {
 					const res = await axios.get(url + '/api/auth/verify', {

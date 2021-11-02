@@ -1,10 +1,10 @@
-// eslint-disable-next-line
 import { useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import { loginCall } from '../apiCalls';
 import GuestUser from '../components/user/GuestUser';
 import { useAuth } from '../context/AuthContext';
+import Loader from '../components/loader/Loader';
 
 const Input = tw.input`h-9 text-gray-300 rounded-full pl-3 w-10/12 outline-none transform transition-all duration-200 bg-fbhover input-cursor border-4 border-solid border-gray-400 border-opacity-50 box-content
 `;
@@ -13,7 +13,7 @@ const Login = () => {
 	const email = useRef();
 	const password = useRef();
 	const history = useHistory();
-	const { dispatch, error, user } = useAuth();
+	const { dispatch, error, user, isFetching } = useAuth();
 
 	useEffect(() => {
 		if (user && typeof user === 'object') {
@@ -37,7 +37,7 @@ const Login = () => {
 	};
 
 	return (
-		<>
+		<>{isFetching && <Loader/>}
 			<div className=' h-full items-center justify-center flex flex-col'>
 				<p className='text-3xl lg:text-7xl lg:font-medium m-5'>
 					Welcome To Social Snap

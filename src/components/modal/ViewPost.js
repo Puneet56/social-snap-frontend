@@ -21,7 +21,7 @@ const LikeLogo = tw.div`mx-2 bg-gradient-to-b from-[#17a8fd] to-[#046ce4] text-w
 
 function ViewPost({ showuser, handleLike, post, liking, likesNumber }) {
 	const { image, comments, description, createdAt } = post;
-	console.log(post);
+
 	return (
 		<Container onClick={(e) => e.stopPropagation()}>
 			<Link className='tooltip' to={`/profile/${showuser._id}`}>
