@@ -31,12 +31,13 @@ const url = process.env.REACT_APP_URL;
 function PostItem({ post, deletePostFromState, editPostInState }) {
 	const { userId, image, likes, comments, description, _id, createdAt } = post;
 	const [likesNumber, setLikes] = useState(likes.length);
-	const [showuser, setUser] = useState();
+	const [showuser, setUser] = useState([]);
 	const { user, token } = useAuth();
 	const [openModal, setOpenModal] = useState(false);
 	const [viewModal, setViewModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [liking, setLiking] = useState(false);
+	const [liked, setLiked] = useState(post.likes.includes(user._id));
 
 	useEffect(() => {
 		setLoading(true);
@@ -70,10 +71,12 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 			if (res.status === 200) {
 				setLikes(res.data.likes);
 				setLiking(false);
+				setLiked(!liked);
 			}
 		} catch (error) {
 			console.log(error);
 			setLiking(false);
+			setLiked(!liked);
 		}
 	};
 
@@ -160,7 +163,7 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 										<LikeLogo>
 											<HiThumbUp className='w-8 h-8 p-1' />
 										</LikeLogo>
-										<p>
+										<p className={`${liked ? 'text-blue-500' : 'text-white'}`}>
 											{likesNumber} {likesNumber === 1 ? 'Like' : 'Likes'}
 										</p>
 									</div>
