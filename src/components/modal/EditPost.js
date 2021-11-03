@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import Compressor from 'compressorjs';
+import { useAuth } from '../../context/AuthContext';
 
 const Container = tw.div`relative md:w-3/5 w-11/12 max-h-[90vh] flex flex-col items-center rounded-3xl bg-fbnav p-4 space-y-3 overflow-auto
 `;
@@ -29,6 +30,7 @@ function EditPost({ post, deletePostFromState, editPostInState }) {
 	const [saving, setSaving] = useState(false);
 	const [addingPhoto, setAddingPhoto] = useState(false);
 	const [error, setError] = useState(false);
+	const { token } = useAuth();
 
 	const inputRef = useRef();
 	const imageRef = useRef();
@@ -39,9 +41,15 @@ function EditPost({ post, deletePostFromState, editPostInState }) {
 	const deletePost = async () => {
 		setDeleting(true);
 		try {
-			const res = await axios.put(url + `/api/posts/${_id}/delete`, {
-				userId: userId,
-			});
+			const res = await axios.put(
+				url + `/api/posts/${_id}/delete`,
+				{
+					userId: userId,
+				},
+				{
+					headers: { Authorization: `${token}` },
+				}
+			);
 			if (res.status === 200) {
 				setDeleting(false);
 				deletePostFromState(post);

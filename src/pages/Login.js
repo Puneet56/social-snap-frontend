@@ -37,7 +37,8 @@ const Login = () => {
 	};
 
 	return (
-		<>{isFetching && <Loader/>}
+		<>
+			{isFetching && <Loader />}
 			<div className=' h-full items-center justify-center flex flex-col'>
 				<p className='text-3xl lg:text-7xl lg:font-medium m-5'>
 					Welcome To Social Snap

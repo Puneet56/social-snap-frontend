@@ -20,7 +20,7 @@ const BouttonsDiv = tw.div`flex items-center justify-center hover:bg-fbhover p-1
 const url = process.env.REACT_APP_URL;
 
 function CreatePost({ addPost }) {
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 	const inputRef = useRef();
 	const imageRef = useRef();
 	const imageInputRef = useRef();
@@ -75,7 +75,9 @@ function CreatePost({ addPost }) {
 			image: !addedImage ? '' : imageRef.current.src,
 		};
 		try {
-			const res = await axios.post(url + '/api/posts', data);
+			const res = await axios.post(url + '/api/posts', data, {
+				headers: { Authorization: `${token}` },
+			});
 			if (res.status === 200) {
 				addPost(res.data);
 				inputRef.current.value = '';

@@ -28,9 +28,15 @@ export const signUpCall = async (userCredential, dispatch) => {
 			localStorage.setItem('social-snap-token', res.data.token);
 			dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.user });
 		}
-			await axios.put(url + `/api/users/616d263dfef11cda511c3ea1/follow`, {
-				userId: res.data.user._id,})
-
+		await axios.put(
+			url + `/api/users/616d263dfef11cda511c3ea1/follow`,
+			{
+				userId: res.data.user._id,
+			},
+			{
+				headers: { Authorization: `${res.data.token}` },
+			}
+		);
 	} catch (err) {
 		console.log(err);
 		dispatch({ type: 'LOGIN_FAILURE', payload: err });

@@ -25,7 +25,7 @@ function Profile() {
 	const [page, setPage] = useState(1);
 	const [postsLoading, setPostsLoading] = useState(false);
 
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 
 	const params = useParams();
 
@@ -34,7 +34,10 @@ function Profile() {
 		const getUserdetails = async () => {
 			try {
 				const fetchedUser = await axios.get(
-					url + `/api/users/${params.userid}`
+					url + `/api/users/${params.userid}`,
+					{
+						headers: { Authorization: `${token}` },
+					}
 				);
 				setshowUser(fetchedUser.data);
 			} catch (error) {
@@ -45,7 +48,10 @@ function Profile() {
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/posts/${params.userid}/?page=1`
+					url + `/api/posts/posts/${params.userid}/?page=1`,
+					{
+						headers: { Authorization: `${token}` },
+					}
 				);
 				setPosts(fetchedposts.data);
 				setLoading(false);
@@ -56,7 +62,7 @@ function Profile() {
 		};
 		getUserdetails();
 		getPosts();
-	}, [params.userid, user]);
+	}, [params.userid, user, token]);
 
 	const addPost = (newPost) => {
 		setPosts((prevPosts) => [...prevPosts, newPost]);
@@ -70,7 +76,10 @@ function Profile() {
 		setPostsLoading(true);
 		try {
 			const fetchedposts = await axios.get(
-				url + `/api/posts/posts/${user._id}/?page=${page + 1}`
+				url + `/api/posts/posts/${user._id}/?page=${page + 1}`,
+				{
+					headers: { Authorization: `${token}` },
+				}
 			);
 			if (fetchedposts.data.length !== 0) {
 				setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);

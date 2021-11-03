@@ -32,7 +32,7 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 	const { userId, image, likes, comments, description, _id, createdAt } = post;
 	const [likesNumber, setLikes] = useState(likes.length);
 	const [showuser, setUser] = useState();
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 	const [openModal, setOpenModal] = useState(false);
 	const [viewModal, setViewModal] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -42,7 +42,9 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 		setLoading(true);
 		const getUserdetails = async () => {
 			try {
-				const fetchedUser = await axios.get(url + `/api/users/${userId}`);
+				const fetchedUser = await axios.get(url + `/api/users/${userId}`, {
+					headers: { Authorization: `${token}` },
+				});
 				setUser(fetchedUser.data);
 				setLoading(false);
 			} catch (error) {
@@ -51,14 +53,20 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 			}
 		};
 		getUserdetails();
-	}, [userId]);
+	}, [userId, token]);
 
 	const handleLike = async () => {
 		setLiking(true);
 		try {
-			const res = await axios.put(url + `/api/posts/${_id}/like`, {
-				userId: user._id,
-			});
+			const res = await axios.put(
+				url + `/api/posts/${_id}/like`,
+				{
+					userId: user._id,
+				},
+				{
+					headers: { Authorization: `${token}` },
+				}
+			);
 			if (res.status === 200) {
 				setLikes(res.data.likes);
 				setLiking(false);

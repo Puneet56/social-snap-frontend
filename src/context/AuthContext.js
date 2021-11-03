@@ -63,6 +63,7 @@ export const AuthProvider = (props) => {
 		user: state.user,
 		isFetching: state.isFetching,
 		error: state.error,
+		token: state.token,
 		dispatch,
 	};
 

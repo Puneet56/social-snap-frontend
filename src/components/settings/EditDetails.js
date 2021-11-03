@@ -15,7 +15,7 @@ const EditProfile = tw.button`min-h-[3rem] m-1 px-5 rounded-md font-medium text-
 const url = process.env.REACT_APP_URL;
 
 const EditDetails = () => {
-	const { user, isFetching } = useAuth();
+	const { user, isFetching, token } = useAuth();
 	const [showuser, setUser] = useState(user);
 	const compressedref = useRef();
 	const imageInput = useRef();
@@ -30,14 +30,16 @@ const EditDetails = () => {
 	useEffect(() => {
 		const getUserdetails = async () => {
 			try {
-				const fetchedUser = await axios.get(url + `/api/users/${user._id}`);
+				const fetchedUser = await axios.get(url + `/api/users/${user._id}`, {
+					headers: { Authorization: `${token}` },
+				});
 				setUser(fetchedUser.data);
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		getUserdetails();
-	}, [user, error]);
+	}, [user, error, token]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -70,7 +72,9 @@ const EditDetails = () => {
 			description.current.value !== ''
 		) {
 			try {
-				const res = await axios.put(url + `/api/users/${user._id}`, data);
+				const res = await axios.put(url + `/api/users/${user._id}`, data, {
+					headers: { Authorization: `${token}` },
+				});
 				setError(res.data);
 				alert(res.data);
 				username.current.value = '';
@@ -100,10 +104,16 @@ const EditDetails = () => {
 					compressedref.current.src = event.target.result;
 					console.log(event.target.result);
 					axios
-						.put(url + `/api/users/${user._id}`, {
-							userId: user._id,
-							profilePicture: event.target.result,
-						})
+						.put(
+							url + `/api/users/${user._id}`,
+							{
+								userId: user._id,
+								profilePicture: event.target.result,
+							},
+							{
+								headers: { Authorization: `${token}` },
+							}
+						)
 						.then((res) => {
 							console.log(res);
 						})

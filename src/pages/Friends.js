@@ -13,12 +13,14 @@ const url = process.env.REACT_APP_URL;
 
 function Friends() {
 	const [friends, setFreinds] = useState([]);
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 
 	useEffect(() => {
 		const getAllUsers = async () => {
 			try {
-				const res = await axios.get(url + '/api/users/all');
+				const res = await axios.get(url + '/api/users/all', {
+					headers: { Authorization: `${token}` },
+				});
 				if (res.status === 200) {
 					setFreinds(res.data);
 				} else {
@@ -29,7 +31,7 @@ function Friends() {
 			}
 		};
 		getAllUsers();
-	}, []);
+	}, [token]);
 
 	return (
 		<div className='w-full h-4/5 overflow-auto'>

@@ -17,14 +17,16 @@ function Posts(props) {
 	const [postsLoading, setPostsLoading] = useState(false);
 	const [page, setPage] = useState(1);
 
-	const { user } = useAuth();
-
+	const { token, user } = useAuth();
 	useEffect(() => {
 		setLoading(true);
 		const getPosts = async () => {
 			try {
 				const fetchedposts = await axios.get(
-					url + `/api/posts/timeline/${user._id}/?page=1`
+					url + `/api/posts/timeline/${user._id}/?page=1`,
+					{
+						headers: { Authorization: `${token}` },
+					}
 				);
 				setPosts(fetchedposts.data);
 				setLoading(false);
@@ -34,7 +36,7 @@ function Posts(props) {
 			}
 		};
 		getPosts();
-	}, [user]);
+	}, [user, token]);
 
 	const addPost = (newPost) => {
 		setPosts((prevPosts) => [...prevPosts, newPost]);
@@ -48,7 +50,10 @@ function Posts(props) {
 		setPostsLoading(true);
 		try {
 			const fetchedposts = await axios.get(
-				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`
+				url + `/api/posts/timeline/${user._id}/?page=${page + 1}`,
+				{
+					headers: { Authorization: `${token}` },
+				}
 			);
 			if (fetchedposts.data.length !== 0) {
 				setPosts((prevPosts) => [...fetchedposts.data, ...prevPosts]);
