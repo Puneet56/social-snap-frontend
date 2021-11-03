@@ -9,7 +9,7 @@ const Follow = tw.button`h-10 m-1 px-5 rounded-md font-medium text-white bg-blue
 const url = process.env.REACT_APP_URL;
 
 function FollowButton({ showuser }) {
-	const { user, dispatch } = useAuth();
+	const { user, dispatch, token } = useAuth();
 	const [loading, setLoading] = useState(false);
 	const [isFollowing, setFollowing] = useState(
 		user.following.includes(showuser._id)
@@ -21,7 +21,10 @@ function FollowButton({ showuser }) {
 			try {
 				const res = await axios.put(
 					url + `/api/users/${showuser._id}/unfollow`,
-					{ userId: user._id }
+					{ userId: user._id },
+					{
+						headers: { Authorization: `${token}` },
+					}
 				);
 				dispatch({ type: 'UNFOLLOW', payload: showuser._id });
 				if (res.status === 200) {
@@ -38,9 +41,15 @@ function FollowButton({ showuser }) {
 		} else {
 			setLoading(true);
 			try {
-				const res = await axios.put(url + `/api/users/${showuser._id}/follow`, {
-					userId: user._id,
-				});
+				const res = await axios.put(
+					url + `/api/users/${showuser._id}/follow`,
+					{
+						userId: user._id,
+					},
+					{
+						headers: { Authorization: `${token}` },
+					}
+				);
 				dispatch({ type: 'FOLLOW', payload: showuser._id });
 				if (res.status === 200) {
 					setFollowing(user.following.includes(showuser._id));
