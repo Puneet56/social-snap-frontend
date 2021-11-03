@@ -160,7 +160,9 @@ function PostItem({ post, deletePostFromState, editPostInState }) {
 										<LikeLogo>
 											<HiThumbUp className='w-8 h-8 p-1' />
 										</LikeLogo>
-										<p>{likesNumber} Likes</p>
+										<p>
+											{likesNumber} {likesNumber === 1 ? 'Like' : 'Likes'}
+										</p>
 									</div>
 								)}
 								<p onClick={openViewModel} className='mr-2'>
