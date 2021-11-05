@@ -4,7 +4,7 @@ import tw from 'tailwind-styled-components';
 import FriendItem from '../components/friends/FriendItem';
 import { useAuth } from '../context/AuthContext';
 
-const FriendList = tw.div`flex items-center justify-start flex-wrap max-w-3xl mx-auto max-h-[90%]
+const FriendList = tw.div`flex items-center justify-start flex-wrap max-w-3xl mx-auto
 `;
 const Heading = tw.div`w-full h-10 text-center bg-fbhover rounded-3xl mx-auto max-w-3xl mt-4 flex items-center justify-center
 `;
