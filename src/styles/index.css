@@ -1126,13 +1126,13 @@ video {
 	--tw-text-opacity: 1;
 	color: rgba(156, 163, 175, var(--tw-text-opacity));
 }
-.text-gray-100 {
-	--tw-text-opacity: 1;
-	color: rgba(243, 244, 246, var(--tw-text-opacity));
-}
 .text-blue-500 {
 	--tw-text-opacity: 1;
 	color: rgba(59, 130, 246, var(--tw-text-opacity));
+}
+.text-gray-100 {
+	--tw-text-opacity: 1;
+	color: rgba(243, 244, 246, var(--tw-text-opacity));
 }
 .underline {
 	text-decoration: underline;
