@@ -15,7 +15,7 @@ const Container = tw.div`max-h-[70vh] m-4 shadow-2xl w-[90%] rounded-xl bg-fbnav
 `;
 const UserInfo = tw.div`w-full h-[4.3rem] p-1 flex items-center justify-start
 `;
-const UserImage = tw.img`h-[80%] rounded-full bg-fbhover mx-2	object-cover  
+const UserImage = tw.img`h-12 w-12 rounded-full bg-fbhover mx-2	object-cover  
 `;
 const PostImage = tw.img`h-[70%] max-h-[24rem] w-full bg-fbhover object-contain drop-shadow-lg
 `;
